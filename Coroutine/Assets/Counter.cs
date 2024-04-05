@@ -2,14 +2,15 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-public class TimerAdder : MonoBehaviour
+public class Counter : MonoBehaviour
 {
     [SerializeField] private TMP_Text _text;
     [SerializeField] private float _delay = 0.5f;
+
     private int _number = 0;
     private WaitForSeconds _wait;
     private bool _isCoroutineWork;
-    private Coroutine _coroutine;
+    private Coroutine counterCoroutine;
 
     private void Awake()
     {
@@ -25,20 +26,20 @@ public class TimerAdder : MonoBehaviour
             {
                 _isCoroutineWork = false;
 
-                if (_coroutine != null)
+                if (counterCoroutine != null)
                 {
-                    StopCoroutine(_coroutine);
+                    StopCoroutine(counterCoroutine);
                 }
             }
             else if (_isCoroutineWork == false)
             {
                 _isCoroutineWork = true;
-                _coroutine = StartCoroutine(Add());
+                counterCoroutine = StartCoroutine(AddCounter());
             }
         }
     }
 
-    private IEnumerator Add()
+    private IEnumerator AddCounter()
     {
         while (_isCoroutineWork == true)
         {
