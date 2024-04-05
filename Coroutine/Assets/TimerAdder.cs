@@ -5,34 +5,42 @@ using UnityEngine;
 public class TimerAdder : MonoBehaviour
 {
     [SerializeField] private TMP_Text _text;
-    [SerializeField]private float _delay = 0.5f;
+    [SerializeField] private float _delay = 0.5f;
     private int _number = 0;
     private WaitForSeconds _wait;
-    private bool _isFirtsInput;
+    private bool _isCoroutineWork;
+    private Coroutine _coroutine;
 
     private void Awake()
     {
-        _isFirtsInput = false;
+        _isCoroutineWork = false;
         _wait = new WaitForSeconds(_delay);
     }
 
     private void Update()
     {
-        if (_isFirtsInput == true && Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            _isFirtsInput = false;
-            StopCoroutine(Add());
-        }
-        else if (_isFirtsInput == false && Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            _isFirtsInput = true;
-            StartCoroutine(Add());
+            if (_isCoroutineWork == true)
+            {
+                _isCoroutineWork = false;
+
+                if (_coroutine != null)
+                {
+                    StopCoroutine(_coroutine);
+                }
+            }
+            else if (_isCoroutineWork == false)
+            {
+                _isCoroutineWork = true;
+                _coroutine = StartCoroutine(Add());
+            }
         }
     }
 
     private IEnumerator Add()
     {
-        while (_isFirtsInput == true)
+        while (_isCoroutineWork == true)
         {
             _number++;
 
