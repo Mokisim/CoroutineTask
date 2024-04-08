@@ -9,12 +9,10 @@ public class Counter : MonoBehaviour
 
     private int _number = 0;
     private WaitForSeconds _wait;
-    private bool _isCoroutineWork;
-    private Coroutine counterCoroutine;
+    private Coroutine _counterCoroutine;
 
     private void Awake()
     {
-        _isCoroutineWork = false;
         _wait = new WaitForSeconds(_delay);
     }
 
@@ -22,26 +20,21 @@ public class Counter : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            if (_isCoroutineWork == true)
+            if (_counterCoroutine == null)
             {
-                _isCoroutineWork = false;
-
-                if (counterCoroutine != null)
-                {
-                    StopCoroutine(counterCoroutine);
-                }
+                _counterCoroutine = StartCoroutine(AddCounter());
             }
-            else if (_isCoroutineWork == false)
+            else
             {
-                _isCoroutineWork = true;
-                counterCoroutine = StartCoroutine(AddCounter());
+                StopCoroutine(_counterCoroutine);
+                _counterCoroutine = null;
             }
         }
     }
 
     private IEnumerator AddCounter()
     {
-        while (_isCoroutineWork == true)
+        while (true)
         {
             _number++;
 
